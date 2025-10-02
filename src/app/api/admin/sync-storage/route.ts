@@ -13,6 +13,16 @@ const sha256 = (s:string) => crypto.createHash("sha256").update(s).digest("hex")
 const norm = (s:string) => s.normalize("NFKC").trim().toLowerCase().replace(/\s+/g, " ");
 const isIsoDate = (s:string) => /^\d{4}-\d{2}-\d{2}$/.test(s);
 
+interface PuzzleMeta {
+  date_utc?: string;
+  title?: string;
+  summary?: string;
+  answer_mode?: "hash" | "regex";
+  answer_plain?: string;
+  answer_regex?: string;
+  published?: boolean;
+}
+
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const key = url.searchParams.get("key");
@@ -50,11 +60,11 @@ export async function GET(req: Request) {
     }
 
     // Read and parse meta.json
-    let meta: any;
+    let meta: PuzzleMeta;
     try {
       const metaContent = fs.readFileSync(metaPath, "utf-8");
-      meta = JSON.parse(metaContent);
-    } catch (error) {
+      meta = JSON.parse(metaContent) as PuzzleMeta;
+    } catch {
       console.log(`Skipping ${folder}: invalid meta.json`);
       continue;
     }
