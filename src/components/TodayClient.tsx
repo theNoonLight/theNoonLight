@@ -11,7 +11,7 @@ type TodayPayload = {
     summary: string;
     downloadUrl: string;
   };
-  _debug?: any;
+  _debug?: Record<string, unknown>;
 };
 
 export default function TodayClient() {
