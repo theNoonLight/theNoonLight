@@ -2,13 +2,19 @@ import { createClient } from "@supabase/supabase-js";
 
 const BUCKET = "puzzles";
 
+import TodayClient from "@/components/TodayClient";
+
 export const dynamic = "force-dynamic";
 
-export default async function TodayPage() {
-  const supa = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+export default function TodayPage() {
+  return (
+    <main className="mx-auto max-w-xl p-6">
+      <h1 className="text-2xl font-semibold mb-4">Today’s Puzzle</h1>
+      <TodayClient />
+    </main>
   );
+}
+
 
   // MVP: latest published puzzle
   const { data: rows, error } = await supa
