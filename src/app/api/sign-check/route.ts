@@ -10,18 +10,21 @@ export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const path = url.searchParams.get("path"); // e.g., 0001/puzzle0001.zip
-    if (!path) return NextResponse.json({ ok:false, error:"missing ?path=" });
+    if (!path) return NextResponse.json({ ok: false, error: "missing ?path=" });
 
     const supa = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY! // server key (private bucket)
+      process.env.SUPABASE_SERVICE_ROLE_KEY! // server key
     );
 
     const { data, error } = await supa.storage.from(BUCKET).createSignedUrl(path, 300);
-    if (error) return NextResponse.json({ ok:false, where:"sign", error: error.message, path });
+    if (error) {
+      return NextResponse.json({ ok: false, where: "sign", error: error.message, path });
+    }
 
-    return NextResponse.json({ ok:true, path, signedUrl: data?.signedUrl ?? null });
-  } catch (e: any) {
-    return NextResponse.json({ ok:false, where:"sign-catch", error: e?.message ?? String(e) });
+    return NextResponse.json({ ok: true, path, signedUrl: data?.signedUrl ?? null });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ ok: false, where: "sign-catch", error: msg });
   }
 }

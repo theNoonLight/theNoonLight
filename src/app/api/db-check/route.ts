@@ -17,9 +17,12 @@ export async function GET() {
       .order("date_utc", { ascending: false })
       .limit(5);
 
-    if (error) return NextResponse.json({ ok:false, where:"db", error: error.message });
-    return NextResponse.json({ ok:true, rows: data });
-  } catch (e: any) {
-    return NextResponse.json({ ok:false, where:"db-catch", error: e?.message ?? String(e) });
+    if (error) {
+      return NextResponse.json({ ok: false, where: "db", error: error.message });
+    }
+    return NextResponse.json({ ok: true, rows: data });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ ok: false, where: "db-catch", error: msg });
   }
 }
