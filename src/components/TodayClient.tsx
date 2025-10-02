@@ -60,6 +60,29 @@ export default function TodayClient() {
       >
         Download Puzzle (.zip)
       </a>
+
+    <form
+        className="mt-6 space-y-3"
+        action="/api/submit"
+        method="post"
+        target="_blank"
+        >
+        <input type="hidden" name="puzzleId" value={data.puzzle.id} />
+        <label className="block text-sm font-medium">Your Answer</label>
+        <input
+            type="text"
+            name="answer"
+            placeholder="Type your answer…"
+            className="w-full rounded border px-3 py-2"
+        />
+        <button
+            type="submit"
+            className="rounded bg-black text-white px-4 py-2"
+        >
+            Submit Answer
+        </button>
+    </form>
+
     </>
   );
 }
