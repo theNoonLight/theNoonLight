@@ -49,10 +49,8 @@ jobs:
         fi
       
     - name: Install dependencies
-      run: |
-        WORK_DIR="${{ steps.set-dir.outputs.working-dir }}"
-        cd "$WORK_DIR"
-        pnpm install
+      working-directory: ${{ steps.set-dir.outputs.working-dir }}
+      run: pnpm install
       
     - name: List puzzle files
       id: list-puzzles
@@ -70,21 +68,21 @@ jobs:
         fi
       
     - name: Validate puzzles
-      run: |
-        WORK_DIR="${{ steps.set-dir.outputs.working-dir }}"
-        cd "$WORK_DIR"
-        pnpm run validate-puzzles
+      working-directory: ${{ steps.set-dir.outputs.working-dir }}
+      run: pnpm run validate-puzzles
       
     - name: Sync puzzles to Supabase
-      run: |
-        WORK_DIR="${{ steps.set-dir.outputs.working-dir }}"
-        cd "$WORK_DIR"
-        echo "Starting puzzle sync from $WORK_DIR..."
-        pnpm run sync-puzzles
-        echo "Sync command completed"
+      working-directory: ${{ steps.set-dir.outputs.working-dir }}
       env:
         NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
         SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      run: |
+        echo "Starting puzzle sync from $(pwd)..."
+        echo "Environment check:"
+        echo "- NEXT_PUBLIC_SUPABASE_URL: $([ -n "$NEXT_PUBLIC_SUPABASE_URL" ] && echo "Set" || echo "Missing")"
+        echo "- SUPABASE_SERVICE_ROLE_KEY: $([ -n "$SUPABASE_SERVICE_ROLE_KEY" ] && echo "Set" || echo "Missing")"
+        pnpm run sync-puzzles
+        echo "Sync command completed"
       
     - name: Verify sync
       run: |
