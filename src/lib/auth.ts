@@ -29,12 +29,25 @@ export const authOptions: NextAuthOptions = {
             .single();
 
           if (!existingUser) {
-            await supabase.from("users").insert({
+            const { data: newUser } = await supabase.from("users").insert({
               email: user.email,
               name: user.name,
               image: user.image,
-              created_at: new Date().toISOString(),
-            });
+            }).select("id").single();
+            
+            if (newUser) {
+              // Store the user ID in the token for later use
+              user.id = newUser.id;
+            }
+          } else {
+            // Update existing user info
+            await supabase.from("users").update({
+              name: user.name,
+              image: user.image,
+              updated_at: new Date().toISOString(),
+            }).eq("id", existingUser.id);
+            
+            user.id = existingUser.id;
           }
         } catch (error) {
           console.error("Error storing user:", error);

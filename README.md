@@ -181,7 +181,7 @@ Make sure to set these in your Vercel dashboard:
 2. Download the puzzle files
 3. Solve the puzzle
 4. Submit your answer using the form
-5. Get immediate feedback on correctness
+5. Get immediate feedback on correctness and see your attempt count
 
 ### For Admins
 

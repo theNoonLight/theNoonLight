@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 type TodayPayload = {
   available: boolean;
@@ -17,6 +18,8 @@ type TodayPayload = {
 export default function TodayClient() {
   const [data, setData] = useState<TodayPayload | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [submissionResult, setSubmissionResult] = useState<{correct: boolean, attempts: number} | null>(null);
+  const { data: session } = useSession();
 
   useEffect(() => {
     let alive = true;
@@ -63,9 +66,20 @@ export default function TodayClient() {
 
     <form
         className="mt-6 space-y-3"
-        action="/api/submit"
-        method="post"
-        target="_blank"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.currentTarget);
+          try {
+            const response = await fetch("/api/submit", {
+              method: "POST",
+              body: formData,
+            });
+            const result = await response.json();
+            setSubmissionResult({ correct: result.correct, attempts: result.attempts });
+          } catch (error) {
+            console.error("Submission error:", error);
+          }
+        }}
         >
         <input type="hidden" name="puzzleId" value={data.puzzle.id} />
         <label className="block text-sm font-medium">Your Answer</label>
@@ -74,14 +88,31 @@ export default function TodayClient() {
             name="answer"
             placeholder="Type your answer…"
             className="w-full rounded border px-3 py-2"
+            required
         />
         <button
             type="submit"
-            className="rounded bg-black text-white px-4 py-2"
+            className="rounded bg-black text-white px-4 py-2 hover:bg-gray-800 transition-colors"
         >
             Submit Answer
         </button>
     </form>
+
+    {submissionResult && (
+      <div className={`mt-4 p-3 rounded ${submissionResult.correct ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+        {submissionResult.correct ? (
+          <p className="font-medium">🎉 Correct! You solved it in {submissionResult.attempts} attempt{submissionResult.attempts !== 1 ? 's' : ''}!</p>
+        ) : (
+          <p>❌ Not quite right. This was attempt #{submissionResult.attempts}. Keep trying!</p>
+        )}
+      </div>
+    )}
+
+    {session && (
+      <div className="mt-4 text-sm text-gray-600">
+        Logged in as {session.user?.name}
+      </div>
+    )}
 
     </>
   );
