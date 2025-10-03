@@ -20,6 +20,16 @@ const isIsoDate = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s);
 async function syncPuzzles() {
   console.log('🔄 Starting puzzle sync...');
   
+  // Debug environment variables
+  console.log('Environment check:');
+  console.log('- NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Set' : 'Missing');
+  console.log('- SUPABASE_SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Set' : 'Missing');
+  
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error('❌ Missing required environment variables');
+    process.exit(1);
+  }
+  
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -91,27 +101,32 @@ async function syncPuzzles() {
     const zipPath = path.join(folderPath, zipFile);
     const storage_path = `${folder}/${zipFile}`;
 
-    // Upload zip file to Supabase storage
-    try {
-      console.log(`  📤 Uploading ${zipFile}...`);
-      const zipBuffer = fs.readFileSync(zipPath);
-      const { error: uploadError } = await supabase.storage
-        .from(BUCKET)
-        .upload(storage_path, zipBuffer, {
-          contentType: "application/zip",
-          upsert: true
-        });
-      
-      if (uploadError) {
-        errors.push(`Failed to upload ${storage_path}: ${uploadError.message}`);
+      // Upload zip file to Supabase storage
+      try {
+        console.log(`  📤 Uploading ${zipFile}...`);
+        const zipBuffer = fs.readFileSync(zipPath);
+        console.log(`  📦 File size: ${zipBuffer.length} bytes`);
+        console.log(`  📍 Storage path: ${storage_path}`);
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from(BUCKET)
+          .upload(storage_path, zipBuffer, {
+            contentType: "application/zip",
+            upsert: true
+          });
+        
+        if (uploadError) {
+          console.error(`  ❌ Upload error:`, uploadError);
+          errors.push(`Failed to upload ${storage_path}: ${uploadError.message}`);
+          continue;
+        }
+        uploads++;
+        console.log(`  ✅ Uploaded ${zipFile} - Data:`, uploadData);
+      } catch (error) {
+        console.error(`  ❌ Upload exception:`, error);
+        errors.push(`Failed to read zip file ${zipPath}: ${error.message}`);
         continue;
       }
-      uploads++;
-      console.log(`  ✅ Uploaded ${zipFile}`);
-    } catch (error) {
-      errors.push(`Failed to read zip file ${zipPath}: ${error.message}`);
-      continue;
-    }
 
     // Compute answer based on mode
     const mode = (meta.answer_mode === "regex") ? "regex" : "hash";
@@ -144,17 +159,20 @@ async function syncPuzzles() {
       published: Boolean(meta.published),
     };
 
-    console.log(`  💾 Upserting puzzle data...`);
-    const { error: upErr } = await supabase
-      .from("puzzles")
-      .upsert(payload, { onConflict: "date_utc" });
-    
-    if (upErr) {
-      errors.push(`Failed to upsert puzzle ${folder}: ${upErr.message}`);
-    } else {
-      upserts++;
-      console.log(`  ✅ Synced puzzle data`);
-    }
+      console.log(`  💾 Upserting puzzle data...`);
+      console.log(`  📋 Payload:`, JSON.stringify(payload, null, 2));
+      
+      const { data: upsertData, error: upErr } = await supabase
+        .from("puzzles")
+        .upsert(payload, { onConflict: "date_utc" });
+      
+      if (upErr) {
+        console.error(`  ❌ Upsert error:`, upErr);
+        errors.push(`Failed to upsert puzzle ${folder}: ${upErr.message}`);
+      } else {
+        upserts++;
+        console.log(`  ✅ Synced puzzle data - Result:`, upsertData);
+      }
   }
 
   console.log(`\n🎉 Sync complete!`);

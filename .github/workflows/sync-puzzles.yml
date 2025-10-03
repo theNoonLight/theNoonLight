@@ -29,6 +29,22 @@ jobs:
       working-directory: ./thenoonlight-app
       run: pnpm install
       
+    - name: Debug environment
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Repository contents:"
+        ls -la
+        echo "Checking for thenoonlight-app directory:"
+        ls -la thenoonlight-app/ || echo "thenoonlight-app directory not found"
+      
+    - name: List puzzle files
+      working-directory: ./thenoonlight-app
+      run: |
+        echo "Puzzle files found:"
+        find puzzles -name "*.json" -o -name "*.zip" | head -20
+        echo "Puzzle directories:"
+        ls -la puzzles/
+      
     - name: Validate puzzles
       working-directory: ./thenoonlight-app
       run: pnpm run validate-puzzles
@@ -38,7 +54,10 @@ jobs:
       env:
         NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
         SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      run: pnpm run sync-puzzles
+      run: |
+        echo "Starting puzzle sync..."
+        pnpm run sync-puzzles
+        echo "Sync command completed"
       
     - name: Verify sync
       run: |
