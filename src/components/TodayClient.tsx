@@ -18,7 +18,7 @@ type TodayPayload = {
 export default function TodayClient() {
   const [data, setData] = useState<TodayPayload | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  const [submissionResult, setSubmissionResult] = useState<{correct: boolean, attempts: number} | null>(null);
+  const [submissionResult, setSubmissionResult] = useState<{correct: boolean, attempts: number, message?: string} | null>(null);
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -75,7 +75,11 @@ export default function TodayClient() {
               body: formData,
             });
             const result = await response.json();
-            setSubmissionResult({ correct: result.correct, attempts: result.attempts });
+            setSubmissionResult({ 
+              correct: result.correct, 
+              attempts: result.attempts, 
+              message: result.message 
+            });
           } catch (error) {
             console.error("Submission error:", error);
           }
@@ -101,7 +105,9 @@ export default function TodayClient() {
     {submissionResult && (
       <div className={`mt-4 p-3 rounded ${submissionResult.correct ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
         {submissionResult.correct ? (
-          <p className="font-medium">🎉 Correct! You solved it in {submissionResult.attempts} attempt{submissionResult.attempts !== 1 ? 's' : ''}!</p>
+          <p className="font-medium">
+            {submissionResult.message || `🎉 Correct! You solved it in ${submissionResult.attempts} attempt${submissionResult.attempts !== 1 ? 's' : ''}!`}
+          </p>
         ) : (
           <p>❌ Not quite right. This was attempt #{submissionResult.attempts}. Keep trying!</p>
         )}

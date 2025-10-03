@@ -81,6 +81,7 @@ CREATE TABLE public.submissions (
   answer_raw text,
   answer_norm text,
   attempts integer DEFAULT 1,
+  solved boolean DEFAULT false,
   ip text,
   user_agent text,
   created_at timestamp with time zone DEFAULT now(),
@@ -112,6 +113,8 @@ CREATE INDEX IF NOT EXISTS idx_accounts_provider ON public.accounts(provider, pr
 CREATE INDEX IF NOT EXISTS idx_submissions_puzzle_id ON public.submissions(puzzle_id);
 CREATE INDEX IF NOT EXISTS idx_submissions_user_id ON public.submissions(user_id);
 CREATE INDEX IF NOT EXISTS idx_submissions_attempts ON public.submissions(attempts);
+CREATE INDEX IF NOT EXISTS idx_submissions_solved ON public.submissions(solved);
+CREATE INDEX IF NOT EXISTS idx_submissions_puzzle_solved ON public.submissions(puzzle_id, solved);
 CREATE INDEX IF NOT EXISTS idx_submissions_puzzle_user ON public.submissions(puzzle_id, user_id);
 CREATE INDEX IF NOT EXISTS idx_submissions_created_at ON public.submissions(created_at);
 

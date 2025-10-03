@@ -56,20 +56,32 @@ export async function POST(req: Request): Promise<NextResponse> {
       isCorrect = pattern.test(norm);
     }
 
-    // Use upsert to either insert new submission or increment attempts
-    // Only query existing submission if we have a user ID
+    // Check existing submission to see if user has already solved this puzzle
     let existingSubmission = null;
     if (userId) {
       const { data } = await supabaseAdmin
         .from("submissions")
-        .select("attempts")
+        .select("attempts, solved")
         .eq("puzzle_id", puzzleId)
         .eq("user_id", userId)
         .single();
       existingSubmission = data;
     }
 
-    const newAttempts = (existingSubmission?.attempts || 0) + 1;
+    // If user already solved this puzzle, don't increment attempts
+    if (existingSubmission?.solved && isCorrect) {
+      return NextResponse.json({ 
+        ok: true, 
+        correct: true, 
+        attempts: existingSubmission.attempts,
+        message: "You already solved this puzzle!"
+      });
+    }
+
+    // Calculate new attempts - only increment if not already solved
+    const newAttempts = existingSubmission?.solved ? 
+      existingSubmission.attempts : 
+      (existingSubmission?.attempts || 0) + 1;
 
     // Insert or update submission
     if (userId) {
@@ -80,6 +92,7 @@ export async function POST(req: Request): Promise<NextResponse> {
         answer_raw: answer,
         answer_norm: norm,
         attempts: newAttempts,
+        solved: isCorrect || existingSubmission?.solved || false,
         ip,
         user_agent: userAgent,
       }, {
@@ -93,6 +106,7 @@ export async function POST(req: Request): Promise<NextResponse> {
         answer_raw: answer,
         answer_norm: norm,
         attempts: 1,
+        solved: isCorrect,
         ip,
         user_agent: userAgent,
       });

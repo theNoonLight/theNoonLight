@@ -34,7 +34,7 @@ export async function GET(req: Request): Promise<NextResponse> {
     // Get user's submissions for this puzzle
     const { data: submissions, error } = await supabaseAdmin
       .from("submissions")
-      .select("attempts, created_at, answer_raw")
+      .select("attempts, solved, created_at, answer_raw")
       .eq("puzzle_id", puzzleId)
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
