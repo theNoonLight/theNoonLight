@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, master ]
     paths:
-      - 'puzzles/**'
+      - 'thenoonlight-app/puzzles/**'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
@@ -19,19 +19,26 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
+        cache: 'pnpm'
+        cache-dependency-path: 'thenoonlight-app/pnpm-lock.yaml'
         
+    - name: Install pnpm
+      run: npm install -g pnpm
+      
     - name: Install dependencies
-      run: npm ci
+      working-directory: ./thenoonlight-app
+      run: pnpm install
       
     - name: Validate puzzles
-      run: npm run validate-puzzles
+      working-directory: ./thenoonlight-app
+      run: pnpm run validate-puzzles
       
     - name: Sync puzzles to Supabase
+      working-directory: ./thenoonlight-app
       env:
         NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
         SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      run: npm run sync-puzzles
+      run: pnpm run sync-puzzles
       
     - name: Verify sync
       run: |
