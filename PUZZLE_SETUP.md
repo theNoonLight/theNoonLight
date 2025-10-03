@@ -62,6 +62,7 @@ Each puzzle folder must contain a `meta.json` file with this structure:
 
 ## 🔧 Environment Variables
 
+### **For Vercel Deployment:**
 Make sure these are set in your Vercel project:
 
 ```bash
@@ -69,6 +70,17 @@ NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 CRON_SECRET=your_random_secret_key  # For cron job security
 ```
+
+### **For Local Development:**
+Create a `.env.local` file in your project root:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+CRON_SECRET=your_random_secret_key
+```
+
+**Note:** You only need these for local puzzle syncing. Regular development (`npm run dev`) works without them.
 
 ## 📝 Adding New Puzzles
 
@@ -102,6 +114,15 @@ npm run validate-puzzles
 ### **Sync Puzzles Manually**
 ```bash
 npm run sync-puzzles
+```
+
+### **Local Development**
+```bash
+# Regular development (no puzzle sync)
+npm run dev
+
+# Development with puzzle sync (requires Supabase env vars)
+npm run dev:with-sync
 ```
 
 ### **Test Cron Job**
