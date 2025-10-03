@@ -4,6 +4,7 @@ on:
   push:
     branches: [ main, master ]
     paths:
+      - 'puzzles/**'
       - 'thenoonlight-app/puzzles/**'
   workflow_dispatch: # Allow manual trigger
 
@@ -25,10 +26,6 @@ jobs:
     - name: Install pnpm
       run: npm install -g pnpm
       
-    - name: Install dependencies
-      working-directory: ./thenoonlight-app
-      run: pnpm install
-      
     - name: Debug environment
       run: |
         echo "Current directory: $(pwd)"
@@ -36,28 +33,58 @@ jobs:
         ls -la
         echo "Checking for thenoonlight-app directory:"
         ls -la thenoonlight-app/ || echo "thenoonlight-app directory not found"
+        echo "Checking for puzzles directory:"
+        ls -la puzzles/ || echo "puzzles directory not found in root"
+        ls -la thenoonlight-app/puzzles/ || echo "puzzles directory not found in thenoonlight-app"
+      
+    - name: Determine working directory
+      id: set-dir
+      run: |
+        if [ -d "thenoonlight-app" ]; then
+          echo "working-dir=./thenoonlight-app" >> $GITHUB_OUTPUT
+          echo "Found thenoonlight-app directory"
+        else
+          echo "working-dir=." >> $GITHUB_OUTPUT
+          echo "Using root directory"
+        fi
+      
+    - name: Install dependencies
+      run: |
+        WORK_DIR="${{ steps.set-dir.outputs.working-dir }}"
+        cd "$WORK_DIR"
+        pnpm install
       
     - name: List puzzle files
-      working-directory: ./thenoonlight-app
+      id: list-puzzles
       run: |
-        echo "Puzzle files found:"
-        find puzzles -name "*.json" -o -name "*.zip" | head -20
-        echo "Puzzle directories:"
-        ls -la puzzles/
+        WORK_DIR="${{ steps.set-dir.outputs.working-dir }}"
+        echo "Working directory: $WORK_DIR"
+        if [ -d "$WORK_DIR/puzzles" ]; then
+          echo "Puzzle files found:"
+          find "$WORK_DIR/puzzles" -name "*.json" -o -name "*.zip" | head -20
+          echo "Puzzle directories:"
+          ls -la "$WORK_DIR/puzzles/"
+        else
+          echo "No puzzles directory found in $WORK_DIR"
+          exit 1
+        fi
       
     - name: Validate puzzles
-      working-directory: ./thenoonlight-app
-      run: pnpm run validate-puzzles
+      run: |
+        WORK_DIR="${{ steps.set-dir.outputs.working-dir }}"
+        cd "$WORK_DIR"
+        pnpm run validate-puzzles
       
     - name: Sync puzzles to Supabase
-      working-directory: ./thenoonlight-app
+      run: |
+        WORK_DIR="${{ steps.set-dir.outputs.working-dir }}"
+        cd "$WORK_DIR"
+        echo "Starting puzzle sync from $WORK_DIR..."
+        pnpm run sync-puzzles
+        echo "Sync command completed"
       env:
         NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
         SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      run: |
-        echo "Starting puzzle sync..."
-        pnpm run sync-puzzles
-        echo "Sync command completed"
       
     - name: Verify sync
       run: |
