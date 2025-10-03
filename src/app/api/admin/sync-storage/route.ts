@@ -26,11 +26,7 @@ interface PuzzleMeta {
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const key = url.searchParams.get("key");
-  
-  // Allow both the secret key and a special GitHub Actions key
-  const isAuthorized = key === SECRET || key === process.env.GITHUB_SYNC_KEY;
-  
-  if (!key || !isAuthorized) {
+  if (!key || key !== SECRET) {
     return NextResponse.json({ ok:false, error:"unauthorized" }, { status: 401 });
   }
 
@@ -52,10 +48,6 @@ export async function GET(req: Request) {
 
   let upserts = 0;
   let uploads = 0;
-  let errors = 0;
-  const results: string[] = [];
-
-  console.log(`Found ${puzzleFolders.length} puzzle folders:`, puzzleFolders);
 
   for (const folder of puzzleFolders) {
     const folderPath = path.join(PUZZLES_DIR, folder);
@@ -63,10 +55,7 @@ export async function GET(req: Request) {
     
     // Check if meta.json exists
     if (!fs.existsSync(metaPath)) {
-      const msg = `Skipping ${folder}: no meta.json found`;
-      console.log(msg);
-      results.push(msg);
-      errors++;
+      console.log(`Skipping ${folder}: no meta.json found`);
       continue;
     }
 
@@ -75,11 +64,8 @@ export async function GET(req: Request) {
     try {
       const metaContent = fs.readFileSync(metaPath, "utf-8");
       meta = JSON.parse(metaContent) as PuzzleMeta;
-    } catch (error) {
-      const msg = `Skipping ${folder}: invalid meta.json - ${error}`;
-      console.log(msg);
-      results.push(msg);
-      errors++;
+    } catch {
+      console.log(`Skipping ${folder}: invalid meta.json`);
       continue;
     }
 
@@ -89,10 +75,7 @@ export async function GET(req: Request) {
       : (isIsoDate(folder) ? folder : null);
 
     if (!date_utc) {
-      const msg = `Skipping ${folder}: no valid date found`;
-      console.log(msg);
-      results.push(msg);
-      errors++;
+      console.log(`Skipping ${folder}: no valid date found`);
       continue;
     }
 
@@ -100,10 +83,7 @@ export async function GET(req: Request) {
     const files = fs.readdirSync(folderPath);
     const zipFile = files.find(f => f.toLowerCase().endsWith(".zip"));
     if (!zipFile) {
-      const msg = `Skipping ${folder}: no .zip file found`;
-      console.log(msg);
-      results.push(msg);
-      errors++;
+      console.log(`Skipping ${folder}: no .zip file found`);
       continue;
     }
 
@@ -121,19 +101,12 @@ export async function GET(req: Request) {
         });
       
       if (uploadError) {
-        const msg = `Failed to upload ${storage_path}: ${uploadError.message}`;
-        console.log(msg);
-        results.push(msg);
-        errors++;
+        console.log(`Failed to upload ${storage_path}:`, uploadError.message);
         continue;
       }
       uploads++;
-      results.push(`✅ Uploaded ${storage_path}`);
     } catch (error) {
-      const msg = `Failed to read zip file ${zipPath}: ${error}`;
-      console.log(msg);
-      results.push(msg);
-      errors++;
+      console.log(`Failed to read zip file ${zipPath}:`, error);
       continue;
     }
 
@@ -145,19 +118,13 @@ export async function GET(req: Request) {
     if (mode === "hash") {
       const plain = (meta.answer_plain ?? "").toString();
       if (!plain) {
-        const msg = `Skipping ${folder}: no answer_plain for hash mode`;
-        console.log(msg);
-        results.push(msg);
-        errors++;
+        console.log(`Skipping ${folder}: no answer_plain for hash mode`);
         continue;
       }
       answer_hash = sha256(norm(plain));
     } else {
       if (!meta.answer_regex) {
-        const msg = `Skipping ${folder}: no answer_regex for regex mode`;
-        console.log(msg);
-        results.push(msg);
-        errors++;
+        console.log(`Skipping ${folder}: no answer_regex for regex mode`);
         continue;
       }
       answer_regex = String(meta.answer_regex);
@@ -182,25 +149,11 @@ export async function GET(req: Request) {
       .upsert(payload, { onConflict: "date_utc" });
     
     if (upErr) {
-      const msg = `Failed to upsert puzzle ${folder}: ${upErr.message}`;
-      console.log(msg);
-      results.push(msg);
-      errors++;
+      console.log(`Failed to upsert puzzle ${folder}:`, upErr.message);
     } else {
       upserts++;
-      results.push(`✅ Upserted puzzle ${folder} (${meta.title})`);
     }
   }
 
-  const summary = {
-    ok: true,
-    total: puzzleFolders.length,
-    upserts,
-    uploads,
-    errors,
-    results
-  };
-
-  console.log('Sync completed:', summary);
-  return NextResponse.json(summary);
+  return NextResponse.json({ ok:true, upserts, uploads });
 }

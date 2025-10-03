@@ -18,47 +18,30 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: '18'
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
-      
-    - name: Build project
-      run: npm run build
-      
-    - name: Wait for Vercel deployment
-      run: sleep 60
+      run: npm install
       
     - name: Sync puzzles to Supabase
       env:
-        GITHUB_SYNC_KEY: ${{ secrets.GITHUB_SYNC_KEY }}
+        NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+        SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        SYNC_SECRET_KEY: ${{ secrets.SYNC_SECRET_KEY }}
       run: |
-        # Try multiple possible URLs
-        POSSIBLE_URLS=(
-          "https://${{ github.repository }}.vercel.app"
-          "https://${{ github.repository }}-git-main-${{ github.repository_owner }}.vercel.app"
-          "https://${{ github.repository }}-${{ github.sha }}.vercel.app"
-        )
-        
-        SYNC_SUCCESS=false
-        
-        for url in "${POSSIBLE_URLS[@]}"; do
-          echo "Trying to sync with: $url"
-          
-          if curl -X GET "$url/api/admin/sync-storage?key=$GITHUB_SYNC_KEY" \
-            -H "Accept: application/json" \
-            --max-time 30 \
-            --fail-with-body; then
-            echo "✅ Successfully synced puzzles with $url"
-            SYNC_SUCCESS=true
-            break
-          else
-            echo "❌ Failed to sync with $url"
-          fi
-        done
-        
-        if [ "$SYNC_SUCCESS" = false ]; then
-          echo "❌ Failed to sync puzzles with any URL"
-          exit 1
+        # Check if puzzles directory exists and has content
+        if [ ! -d "puzzles" ] || [ -z "$(ls -A puzzles)" ]; then
+          echo "No puzzles directory or no puzzles found"
+          exit 0
         fi
+        
+        # Call the sync API
+        curl -X GET "${{ secrets.VERCEL_URL }}/api/admin/sync-storage?key=${{ secrets.SYNC_SECRET_KEY }}" \
+          -H "Content-Type: application/json" \
+          --fail-with-body
+          
+    - name: Verify sync
+      run: |
+        echo "Puzzle sync completed successfully!"
+        echo "Check your Supabase dashboard to verify puzzles were uploaded."

@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "node scripts/validate-puzzles.js && node scripts/sync-puzzles.js && next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync-puzzles": "node scripts/sync-puzzles.js",
+    "validate-puzzles": "node scripts/validate-puzzles.js"
   },
   "dependencies": {
     "@auth/supabase-adapter": "^1.10.0",
