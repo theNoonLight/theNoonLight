@@ -1,0 +1,8 @@
+{
+  "date_utc": "2025-01-15",
+  "title": "Sample Puzzle Title",
+  "summary": "A brief description of what this puzzle is about",
+  "answer_mode": "hash",
+  "answer_plain": "correct answer here",
+  "published": true
+}
