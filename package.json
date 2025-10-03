@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "node scripts/validate-puzzles.js && node scripts/sync-puzzles.js && next build --turbopack",
+    "dev:with-sync": "node scripts/validate-puzzles.js && node scripts/sync-puzzles.js && next dev --turbopack",
+    "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
     "sync-puzzles": "node scripts/sync-puzzles.js",

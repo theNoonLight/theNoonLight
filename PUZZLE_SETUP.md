@@ -1,17 +1,14 @@
 # 🧩 Puzzle Upload System Setup
 
-This guide explains how to set up automatic puzzle uploads to Supabase when you push to GitHub and Vercel deploys.
+This guide explains how to set up automatic puzzle uploads to Supabase using GitHub Actions.
 
 ## 🚀 How It Works
 
-### **1. Build-Time Sync (Primary)**
-- When Vercel builds your app, it runs `npm run build`
-- This automatically validates and syncs all puzzles from the `puzzles/` directory
+### **GitHub Actions Workflow**
+- When you push changes to the `puzzles/` directory, GitHub Actions automatically triggers
+- The workflow validates puzzle structure and syncs them to Supabase
 - Puzzles are uploaded to Supabase Storage and metadata is saved to the database
-
-### **2. Cron Job Sync (Backup)**
-- Vercel runs a cron job every 6 hours to ensure puzzles stay in sync
-- This catches any puzzles that might have been missed during build
+- Works with any deployment platform (Vercel, Netlify, etc.)
 
 ## 📁 Puzzle Structure
 
@@ -62,13 +59,15 @@ Each puzzle folder must contain a `meta.json` file with this structure:
 
 ## 🔧 Environment Variables
 
-### **For Vercel Deployment:**
-Make sure these are set in your Vercel project:
+### **For GitHub Actions:**
+Set these as repository secrets in your GitHub repository:
+
+1. Go to your repository → Settings → Secrets and variables → Actions
+2. Add these secrets:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-CRON_SECRET=your_random_secret_key  # For cron job security
 ```
 
 ### **For Local Development:**
@@ -77,7 +76,6 @@ Create a `.env.local` file in your project root:
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-CRON_SECRET=your_random_secret_key
 ```
 
 **Note:** You only need these for local puzzle syncing. Regular development (`npm run dev`) works without them.
@@ -101,7 +99,7 @@ git push origin main
 ```
 
 ### **Step 4: Automatic Sync**
-- Vercel will automatically build and sync the puzzle
+- GitHub Actions will automatically validate and sync the puzzle
 - The puzzle will appear in your app once deployed
 
 ## 🛠️ Manual Commands
@@ -125,8 +123,10 @@ npm run dev
 npm run dev:with-sync
 ```
 
-### **Test Cron Job**
-Visit: `https://your-domain.vercel.app/api/cron/sync-puzzles`
+### **Test GitHub Action**
+- Go to your repository → Actions tab
+- Look for "Sync Puzzles to Supabase" workflow
+- You can also trigger it manually using "workflow_dispatch"
 
 ## 🔍 Troubleshooting
 
@@ -141,15 +141,16 @@ Visit: `https://your-domain.vercel.app/api/cron/sync-puzzles`
 2. Check that .zip files are not empty
 3. Verify Supabase credentials are correct
 
-### **Cron Job Issues**
-1. Check that `CRON_SECRET` is set in Vercel
-2. Verify the cron job is enabled in Vercel dashboard
-3. Check Vercel function logs
+### **GitHub Action Issues**
+1. Check that repository secrets are set correctly
+2. Verify the workflow file is in `.github/workflows/`
+3. Check GitHub Actions logs for detailed error messages
+4. Ensure the workflow has permission to access secrets
 
 ## 📊 Monitoring
 
-- **Build Logs**: Check Vercel deployment logs for sync status
-- **Cron Logs**: Monitor Vercel function logs for cron job execution
+- **GitHub Actions**: Check the Actions tab in your repository for workflow status
+- **Build Logs**: Check your deployment platform logs for app status
 - **Database**: Check Supabase dashboard for uploaded puzzles
 - **Storage**: Verify files in Supabase Storage bucket
 
