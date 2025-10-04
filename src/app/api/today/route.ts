@@ -48,7 +48,7 @@ export async function GET() {
         downloadUrl: signed.signedUrl
       }
     });
-  } catch {
+  } catch { 
     return NextResponse.json({ available: false }, { status: 200 });
   }
 }
