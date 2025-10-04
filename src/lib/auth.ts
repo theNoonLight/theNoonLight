@@ -28,7 +28,7 @@ export const authOptions: NextAuthOptions = {
             .eq("email", user.email)
             .single();
 
-          if (!existingUser) {
+          if (!existingUser) { 
             const { data: newUser } = await supabase.from("users").insert({
               email: user.email,
               name: user.name,
