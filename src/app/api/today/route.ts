@@ -47,7 +47,7 @@ export async function GET() {
         summary: p.summary,
         downloadUrl: signed.signedUrl
       }
-    });  
+    });
   } catch {
     return NextResponse.json({ available: false }, { status: 200 });
   }
