@@ -1,0 +1,12 @@
+{
+    "date_utc": "2025-01-15",
+    "title": "Voices from the Past",
+    "summary": "Open the audio and look at the spectrogram. Your answer is the full quoted sentence.",
+    "type": "audio",
+    "difficulty": 2,
+    "answer_mode": "hash",
+    "answer_plain": "we choose to go to the moon not because it is easy...",
+    "answer_regex": null,
+    "published": true
+  }
+  
