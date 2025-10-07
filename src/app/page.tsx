@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="min-h-screen relative">
       {/* Dither Background */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 -z-10">
         <Dither
           waveSpeed={0.05}
           waveFrequency={3}
@@ -21,7 +21,7 @@ export default function Home() {
       </div>
       
       {/* Login button in top left */}
-      <div className="absolute top-6 left-6 z-10">
+      <div className="absolute top-6 left-6 z-50">
         <LoginButton />
       </div>
       
