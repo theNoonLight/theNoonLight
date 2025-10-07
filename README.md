@@ -20,10 +20,6 @@ thenoonlight-app/
 │   │   │   ├── admin/
 │   │   │   │   └── sync-storage/     # Admin puzzle sync endpoint
 │   │   │   │       └── route.ts
-│   │   │   ├── db-check/             # Database health check
-│   │   │   │   └── route.ts
-│   │   │   ├── sign-check/           # Supabase auth check
-│   │   │   │   └── route.ts
 │   │   │   ├── submit/               # Answer submission endpoint
 │   │   │   │   └── route.ts
 │   │   │   └── today/                # Today's puzzle data
@@ -110,8 +106,6 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ### Health Check Endpoints
 
-- `GET /api/db-check` - Check database connectivity
-- `GET /api/sign-check` - Check Supabase authentication
 
 ## 🧩 Puzzle System
 
