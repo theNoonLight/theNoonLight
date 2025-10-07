@@ -36,7 +36,7 @@ export async function GET() {
 
     if (signErr || !signed?.signedUrl) {
       return NextResponse.json({ available: false }, { status: 200 });
-    }
+    }  
 
     return NextResponse.json({
       available: true,
