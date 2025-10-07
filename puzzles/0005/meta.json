@@ -1,0 +1,12 @@
+{
+    "date_utc": "2025-10-09",
+    "title": "Sounds from the Past",
+    "summary": "Open the audio and look at the spectrogram. Your answer is the full quoted sentence.",
+    "type": "audio",
+    "difficulty": 2,
+    "answer_mode": "hash",
+    "answer_plain": "TEST",
+    "answer_regex": null,
+    "published": true
+  }
+  
