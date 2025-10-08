@@ -1,5 +1,4 @@
 import Link from "next/link";
-import LoginButton from "@/components/LoginButton";
 import Dither from "@/components/Dither";
 
 export default function Home() {
@@ -20,11 +19,6 @@ export default function Home() {
         />
       </div>
       
-      {/* Login button in top left */}
-      <div className="absolute top-6 left-6 z-50">
-        <LoginButton />
-      </div>
-      
       {/* Main content centered */}
       <div className="min-h-screen flex items-center justify-center relative z-10">
         <div className="text-center">
@@ -41,14 +35,12 @@ export default function Home() {
             </Link>
             
             <div className="mt-8">
-              <a
-                href="https://snehithn.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/about"
                 className="text-white text-lg poppins-medium hover:text-orange-100 transition-colors duration-300 underline drop-shadow-md"
               >
-                Visit my personal website
-              </a>
+                Learn more about us
+              </Link>
             </div>
           </div>
         </div>
