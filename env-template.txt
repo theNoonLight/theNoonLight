@@ -1,0 +1,17 @@
+# Copy this to .env.local and fill in your actual values
+
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_random_secret_string_here
+
+# Google OAuth Configuration
+GOOGLE_CLIENT_ID=your_google_client_id_here
+GOOGLE_CLIENT_SECRET=your_google_client_secret_here
+
+# Supabase Configuration (if you have these)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+
+# Admin Configuration
+SYNC_SECRET_KEY=your_sync_secret_key_here
