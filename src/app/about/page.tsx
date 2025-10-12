@@ -1,69 +1,60 @@
+"use client";
+
+import ProfileCard from "@/components/ProfileCard";
+
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            About The Noon Light
-          </h1>
-          <div className="w-24 h-1 bg-orange-600 mx-auto rounded-full"></div>
+    <div className="min-h-screen relative text-white bg-black" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif' }}>
+      <div className="max-w-6xl mx-auto px-4 py-16 relative z-10">
+        {/* Hero Section */}
+        <div className="text-center mb-20">
+              <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+                About The Noon Light
+              </h1>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Where minds meet challenges and communities are built through the art of problem-solving.
+              </p>
+          <div className="w-32 h-1 bg-white mx-auto rounded-full mt-8"></div>
         </div>
 
-        <div className="prose prose-lg max-w-none">
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">What We Do</h2>
-            <p className="text-gray-700 leading-relaxed mb-6">
-              The Noon Light is a daily puzzle platform that challenges minds and builds community. 
-              Every day at noon PT, we release a new puzzle designed to test your problem-solving skills, 
-              creativity, and perseverance.
-            </p>
-            <p className="text-gray-700 leading-relaxed">
-              Our puzzles range from logic problems and cryptography challenges to creative thinking exercises. 
-              Whether you're a seasoned puzzle solver or just getting started, there's something here for everyone.
+        {/* Main Content */}
+        <div className="space-y-16">
+          {/* What We Do */}
+          <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-8 border border-gray-800/50">
+            <h2 className="text-2xl font-bold text-white mb-4">What We Do</h2>
+                <p className="text-gray-300 leading-relaxed">
+                  The Noon Light is a daily puzzle platform that challenges minds and builds community. 
+                  Every day at noon PT, we release a new puzzle designed to test your problem-solving skills.
+                  Our puzzles range from logic problems and cryptography challenges to creative thinking exercises.
+                </p>
+          </div>
+
+          {/* Our Mission */}
+          <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-8 border border-gray-800/50">
+            <h2 className="text-2xl font-bold text-white mb-4">Our Mission</h2>
+            <p className="text-gray-300 leading-relaxed">
+              To create a global community of puzzle enthusiasts who challenge themselves daily and grow together through problem-solving.
+              We believe that puzzles are more than entertainment—they're tools for developing critical thinking and fostering connections.
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">How to Contribute</h2>
-            <p className="text-gray-700 leading-relaxed mb-4">
-              We're always looking for puzzle creators to join our community! Here's how you can contribute:
-            </p>
-            <ul className="list-disc list-inside text-gray-700 space-y-2">
-              <li>Submit your original puzzle ideas through our contact form</li>
-              <li>Join our Discord community to discuss puzzle creation</li>
-              <li>Participate in our puzzle design workshops</li>
-              <li>Share feedback on existing puzzles to help us improve</li>
-            </ul>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Meet the Team</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-24 h-24 bg-orange-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-orange-600">SN</span>
+              {/* Meet the Team */}
+              <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-8 border border-gray-800/50">
+                <h2 className="text-2xl font-bold text-white mb-6">Meet the Team</h2>
+                <div className="grid md:grid-cols-3 gap-6">
+                  <ProfileCard
+                    name="Snehith Nayak"
+                  />
+                  <ProfileCard
+                    name="Aman Kumpawat"
+                  />
+                  <ProfileCard
+                    name="Vishal Victor"
+                  />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">Snehith Nayak</h3>
-                <p className="text-gray-600">Co-Founder</p>
-              </div>
-              <div className="text-center">
-                <div className="w-24 h-24 bg-orange-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-orange-600">AK</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900">Aman Kumpawat</h3>
-                <p className="text-gray-600">Co-Founder</p>
-              </div>
-              <div className="text-center">
-                <div className="w-24 h-24 bg-orange-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-orange-600">VV</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900">Vishal Victor</h3>
-                <p className="text-gray-600">Co-Founder</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-}
+      );
+    }
