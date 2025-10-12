@@ -78,9 +78,18 @@ npm install
 3. Set up environment variables:
 Create a `.env.local` file with the following variables:
 ```env
+# Supabase Configuration
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_random_secret_string
+GOOGLE_CLIENT_ID=your_google_oauth_client_id
+GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
+
+# Admin Configuration
 SYNC_SECRET_KEY=your_sync_secret_key
 ```
 
@@ -162,10 +171,21 @@ The system supports two answer validation modes:
 
 Make sure to set these in your Vercel dashboard:
 
+**Supabase Configuration:**
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
+
+**NextAuth Configuration:**
+- `NEXTAUTH_URL` (your Vercel domain)
+- `NEXTAUTH_SECRET` (random string)
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+
+**Admin Configuration:**
 - `SYNC_SECRET_KEY`
+
+📖 **See `VERCEL_DEPLOYMENT.md` for detailed setup instructions.**
 
 ## 📝 Usage
 

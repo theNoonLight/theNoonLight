@@ -1,33 +1,16 @@
--- Migration to replace correct boolean with attempts integer
--- This migration changes the submissions table to track attempts instead of just correct/incorrect
+-- Migrate submissions table to use attempts instead of correct boolean
+-- First, add the new columns
+ALTER TABLE submissions ADD COLUMN attempts INTEGER DEFAULT 1;
+ALTER TABLE submissions ADD COLUMN user_id UUID REFERENCES users(id);
 
--- First, add the attempts column
-ALTER TABLE public.submissions 
-ADD COLUMN IF NOT EXISTS attempts INTEGER DEFAULT 1;
+-- Update existing records to set attempts based on correct field
+UPDATE submissions SET attempts = CASE WHEN correct THEN 1 ELSE 1 END;
 
--- Add user_id column to track attempts per user per puzzle
-ALTER TABLE public.submissions 
-ADD COLUMN IF NOT EXISTS user_id UUID;
+-- Create unique constraint on puzzle_id and user_id
+ALTER TABLE submissions ADD CONSTRAINT unique_puzzle_user UNIQUE(puzzle_id, user_id);
 
--- Create a unique constraint on puzzle_id + user_id to ensure one record per user per puzzle
--- This will allow us to use upsert logic to increment attempts
-ALTER TABLE public.submissions 
-ADD CONSTRAINT IF NOT EXISTS unique_user_puzzle 
-UNIQUE (puzzle_id, user_id);
+-- Create index on user_id for better query performance
+CREATE INDEX idx_submissions_user_id ON submissions(user_id);
 
--- Update existing records to have attempts = 1 where correct = true
--- and attempts = 1 where correct = false (since they were single attempts)
-UPDATE public.submissions 
-SET attempts = 1 
-WHERE attempts IS NULL;
-
--- Drop the correct column since we're replacing it with attempts
-ALTER TABLE public.submissions 
-DROP COLUMN IF NOT EXISTS correct;
-
--- Update indexes - remove correct index, add attempts index
-DROP INDEX IF EXISTS idx_submissions_correct;
-CREATE INDEX IF NOT EXISTS idx_submissions_attempts ON public.submissions(attempts);
-CREATE INDEX IF NOT EXISTS idx_submissions_user_id ON public.submissions(user_id);
-CREATE INDEX IF NOT EXISTS idx_submissions_puzzle_user ON public.submissions(puzzle_id, user_id);
-
+-- Drop the old correct column (commented out for safety)
+-- ALTER TABLE submissions DROP COLUMN correct;
