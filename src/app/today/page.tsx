@@ -1,16 +1,15 @@
 "use client";
 
-import { useState } from "react";
-
 export default function TodayPage() {
-  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'expert'>('medium');
+  // Future difficulty selection functionality
+  // const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'expert'>('medium');
   
-  const difficulties = [
-    { id: 'easy', label: 'Easy', color: 'from-green-500 to-emerald-600' },
-    { id: 'medium', label: 'Medium', color: 'from-yellow-500 to-orange-600' },
-    { id: 'hard', label: 'Hard', color: 'from-orange-500 to-red-600' },
-    { id: 'expert', label: 'Expert', color: 'from-red-500 to-pink-600' },
-  ];
+  // const difficulties = [
+  //   { id: 'easy', label: 'Easy', color: 'from-green-500 to-emerald-600' },
+  //   { id: 'medium', label: 'Medium', color: 'from-yellow-500 to-orange-600' },
+  //   { id: 'hard', label: 'Hard', color: 'from-orange-500 to-red-600' },
+  //   { id: 'expert', label: 'Expert', color: 'from-red-500 to-pink-600' },
+  // ];
 
   return (
         <div className="min-h-screen relative text-white bg-black" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif' }}>
@@ -18,7 +17,7 @@ export default function TodayPage() {
         {/* Hero Section */}
         <div className="text-center mb-20">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
-            Today's Puzzle
+            Today&apos;s Puzzle
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
             New challenges released daily at noon PT.
@@ -31,7 +30,7 @@ export default function TodayPage() {
           <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-8 border border-gray-800/50">
             <h2 className="text-2xl font-bold text-white mb-4">Puzzle Coming Soon</h2>
             <p className="text-gray-300 leading-relaxed">
-              We're preparing engaging computer science challenges for you. Check back soon for your first puzzle!
+              We&apos;re preparing engaging computer science challenges for you. Check back soon for your first puzzle!
             </p>
           </div>
 

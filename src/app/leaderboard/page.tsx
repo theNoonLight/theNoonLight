@@ -46,7 +46,7 @@ export default function LeaderboardPage() {
             Leaderboard
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            See who's leading in puzzle solving.
+            See who&apos;s leading in puzzle solving.
           </p>
           <div className="w-32 h-1 bg-white mx-auto rounded-full mt-8"></div>
         </div>
@@ -70,7 +70,7 @@ export default function LeaderboardPage() {
                 : 'text-gray-300 hover:bg-white/10'
             }`}
           >
-            Today's Fastest
+            Today&apos;s Fastest
           </button>
         </div>
 
@@ -80,7 +80,7 @@ export default function LeaderboardPage() {
           <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-8 border border-gray-800/50">
             <h2 className="text-2xl font-bold text-white mb-4">Leaderboard Features Coming Soon</h2>
             <p className="text-gray-300 leading-relaxed">
-              We're working on advanced leaderboard features including monthly competitions, achievement badges, detailed analytics, and team rankings. Stay tuned for exciting updates!
+              We&apos;re working on advanced leaderboard features including monthly competitions, achievement badges, detailed analytics, and team rankings. Stay tuned for exciting updates!
             </p>
           </div>
 
@@ -114,7 +114,7 @@ export default function LeaderboardPage() {
 
             {activeTab === 'today' && (
               <div>
-                <h2 className="text-2xl font-bold text-white mb-6">Today's Fastest</h2>
+                <h2 className="text-2xl font-bold text-white mb-6">Today&apos;s Fastest</h2>
                 <div className="space-y-4">
                   {currentPuzzleLeaderboard.map((entry, index) => (
                     <div key={entry.id} className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl border border-gray-700/50 hover:bg-gray-700/50 transition-all duration-300">

@@ -34,7 +34,7 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold text-white mb-4">Our Mission</h2>
             <p className="text-gray-300 leading-relaxed">
               To create a global community of puzzle enthusiasts who challenge themselves daily and grow together through problem-solving.
-              We believe that puzzles are more than entertainment—they're tools for developing critical thinking and fostering connections.
+              We believe that puzzles are more than entertainment—they&apos;re tools for developing critical thinking and fostering connections.
             </p>
           </div>
 

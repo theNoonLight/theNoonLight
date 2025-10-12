@@ -13,7 +13,7 @@ interface ProfileCardProps {
   };
 }
 
-export default function ProfileCard({ name, avatar, bio, stats }: ProfileCardProps) {
+export default function ProfileCard({ name, bio, stats }: ProfileCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

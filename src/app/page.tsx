@@ -27,7 +27,7 @@ export default function Home() {
                 className="bg-transparent text-white px-6 py-3 rounded-xl text-lg font-medium hover:bg-white/10 transition-all duration-200 backdrop-blur-sm border border-white/30 lowercase tracking-tight"
                 style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif' }}
               >
-                today's puzzle
+                today&apos;s puzzle
               </Link>
             </div>
           </div>

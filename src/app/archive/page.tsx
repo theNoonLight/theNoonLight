@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
 export default function ArchivePage() {
-  const [filter, setFilter] = useState<'all' | 'solved' | 'unsolved'>('all');
-  const [hoveredProblem, setHoveredProblem] = useState<number | null>(null);
+  // const [filter, setFilter] = useState<'all' | 'solved' | 'unsolved'>('all');
+  // const [hoveredProblem, setHoveredProblem] = useState<number | null>(null);
   
   // Generate 20 puzzle placeholders with different earth tones
   const puzzles = Array.from({ length: 20 }, (_, i) => ({
@@ -19,39 +17,40 @@ export default function ArchivePage() {
     ][i]
   }));
 
-  const filterOptions = [
-    { id: 'all', label: 'All Puzzles', count: 0 },
-    { id: 'solved', label: 'Solved', count: 0 },
-    { id: 'unsolved', label: 'Unsolved', count: 0 },
-  ];
+  // Future filter functionality
+  // const filterOptions = [
+  //   { id: 'all', label: 'All Puzzles', count: 0 },
+  //   { id: 'solved', label: 'Solved', count: 0 },
+  //   { id: 'unsolved', label: 'Unsolved', count: 0 },
+  // ];
 
-  const famousProblems = [
-    { 
-      title: "P vs NP Problem", 
-      desc: "One of the most important unsolved problems in computer science.",
-      difficulty: "Unsolved",
-      reward: "$1,000,000",
-      color: "from-cyan-500 to-blue-500",
-      icon: "💎"
-    },
-    { 
-      title: "Riemann Hypothesis", 
-      desc: "A conjecture about the distribution of prime numbers.",
-      difficulty: "Unsolved",
-      reward: "$1,000,000",
-      color: "from-purple-500 to-pink-500",
-      icon: "🔢"
-    }
-  ];
+  // const famousProblems = [
+  //   { 
+  //     title: "P vs NP Problem", 
+  //     desc: "One of the most important unsolved problems in computer science.",
+  //     difficulty: "Unsolved",
+  //     reward: "$1,000,000",
+  //     color: "from-cyan-500 to-blue-500",
+  //     icon: "💎"
+  //   },
+  //   { 
+  //     title: "Riemann Hypothesis", 
+  //     desc: "A conjecture about the distribution of prime numbers.",
+  //     difficulty: "Unsolved",
+  //     reward: "$1,000,000",
+  //     color: "from-purple-500 to-pink-500",
+  //     icon: "🔢"
+  //   }
+  // ];
 
-  const otherProblems = [
-    { name: "Goldbach's Conjecture", status: "Open", year: "1742", icon: "🧮" },
-    { name: "Four Color Theorem", status: "Solved", year: "1976", icon: "🎨" },
-    { name: "Collatz Conjecture", status: "Open", year: "1937", icon: "🔄" },
-    { name: "Fermat's Last Theorem", status: "Solved", year: "1995", icon: "📐" },
-    { name: "Twin Prime Conjecture", status: "Open", year: "Ancient", icon: "👯" },
-    { name: "Navier-Stokes Equations", status: "Open", year: "1850", icon: "🌊" }
-  ];
+  // const otherProblems = [
+  //   { name: "Goldbach's Conjecture", status: "Open", year: "1742", icon: "🧮" },
+  //   { name: "Four Color Theorem", status: "Solved", year: "1976", icon: "🎨" },
+  //   { name: "Collatz Conjecture", status: "Open", year: "1937", icon: "🔄" },
+  //   { name: "Fermat's Last Theorem", status: "Solved", year: "1995", icon: "📐" },
+  //   { name: "Twin Prime Conjecture", status: "Open", year: "Ancient", icon: "👯" },
+  //   { name: "Navier-Stokes Equations", status: "Open", year: "1850", icon: "🌊" }
+  // ];
 
   return (
         <div className="min-h-screen relative text-white bg-black" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif' }}>
