@@ -1,5 +1,4 @@
 import Link from "next/link";
-import LoginButton from "@/components/LoginButton";
 import Dither from "@/components/Dither";
 
 export default function Home() {
@@ -7,52 +6,32 @@ export default function Home() {
     <div className="min-h-screen relative">
       {/* Dither Background */}
       <div className="absolute inset-0 -z-10">
-        <Dither
-          waveSpeed={0.05}
-          waveFrequency={3}
-          waveAmplitude={0.3}
-          waveColor={[1.0, 1.0, 1.0]} // White color
-          colorNum={4}
-          pixelSize={2}
-          disableAnimation={false}
-          enableMouseInteraction={true}
-          mouseRadius={1}
-        />
+        <Dither />
       </div>
-      
-      {/* Login button in top left */}
-      <div className="absolute top-6 left-6 z-50">
-        <LoginButton />
-      </div>
-      
-      {/* Main content centered */}
-      <div className="min-h-screen flex items-center justify-center relative z-10">
-        <div className="text-center">
-          <h1 className="text-8xl md:text-9xl poppins-black text-white mb-12 drop-shadow-lg">
-            The Noon Light
-          </h1>
-          
-          <div className="space-y-6">
-            <Link
-              href="/today"
-              className="inline-block bg-white text-orange-600 poppins-bold py-4 px-12 rounded-lg text-2xl hover:bg-orange-50 transition-colors duration-300 shadow-lg"
-            >
-              View Today&apos;s Puzzle
-            </Link>
+        
+        {/* Main content centered */}
+        <div className="min-h-screen flex items-center justify-center relative z-10">
+          <div className="text-center">
+            <h1 className="text-black mb-8 lowercase tracking-tight" style={{ 
+              textShadow: '0 0 1px white, 0 0 2px white, 0 0 3px white',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif',
+              fontSize: 'clamp(4.5rem, 13vw, 8rem)',
+              fontWeight: 600
+            }}>
+              the noon light
+            </h1>
             
-            <div className="mt-8">
-              <a
-                href="https://snehithn.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-white text-lg poppins-medium hover:text-orange-100 transition-colors duration-300 underline drop-shadow-md"
+            <div className="mt-8 flex justify-center">
+              <Link
+                href="/today"
+                className="bg-transparent text-white px-6 py-3 rounded-xl text-lg font-medium hover:bg-white/10 transition-all duration-200 backdrop-blur-sm border border-white/30 lowercase tracking-tight"
+                style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif' }}
               >
-                Visit my personal website
-              </a>
+                today's puzzle
+              </Link>
             </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }
