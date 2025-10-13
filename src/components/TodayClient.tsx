@@ -39,13 +39,13 @@ export default function TodayClient() {
   if (err) {
     return (
       <div className="text-red-600">
-        Something went wrong loading today’s puzzle. {err}
+        Something went wrong loading today's puzzle. {err}
       </div>
     );
   }
 
   if (!data) {
-    return <div className="text-gray-500">Loading…</div>;
+    return <div className="text-gray-500">Loading...</div>;
   }
 
   if (!data.available || !data.puzzle) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -9,17 +9,23 @@ export default function MenuBar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when route changes or clicking outside
   useEffect(() => {
     setIsDropdownOpen(false);
+    setIsUserDropdownOpen(false);
   }, [pathname]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setIsUserDropdownOpen(false);
       }
     }
 
@@ -30,93 +36,101 @@ export default function MenuBar() {
   }, []);
 
   const menuItems = [
-    { href: "/today", label: "today's puzzle" },
-    { href: "/about", label: "about" },
-    { href: "/archive", label: "archive" },
-    { href: "/leaderboard", label: "leaderboard" },
+    { href: "/today", label: "Today's Puzzle" },
+    { href: "/about", label: "About" },
+    { href: "/archive", label: "Archive" },
+    { href: "/leaderboard", label: "Leaderboard" },
   ];
 
   const isActive = (href: string) => pathname === href;
+
+  const fontFamily = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif';
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          
           {/* Hamburger Menu Button - Absolute Left */}
           <div className="absolute left-4 z-10">
             <div ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className={`inline-flex items-center justify-center p-3 rounded-xl transition-all duration-300 text-white hover:bg-white/10 focus:ring-white/20 focus:outline-none focus:ring-2 backdrop-blur-sm`}
+                className="inline-flex items-center justify-center p-3 rounded-xl transition-all duration-300 text-white hover:bg-white/10 focus:ring-white/20 focus:outline-none focus:ring-2 backdrop-blur-sm"
                 aria-expanded={isDropdownOpen}
                 aria-label="Toggle navigation menu"
               >
-              {/* Hamburger Icon */}
-              <svg
-                className={`${isDropdownOpen ? 'hidden' : 'block'} transition-transform duration-200`}
-                width="34"
-                height="34"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-              
-              {/* Close Icon */}
-              <svg
-                className={`${isDropdownOpen ? 'block' : 'hidden'} transition-transform duration-200`}
-                width="34"
-                height="34"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            {/* Sleek Transparent Dropdown Menu */}
-            {isDropdownOpen && (
-            <div className="absolute left-0 mt-3 w-56 bg-black rounded-xl shadow-2xl border border-white/10 overflow-hidden animate-in slide-in-from-top-2 duration-300 lowercase tracking-tight" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif' }}>
-              <div className="py-2">
-                {/* Home Link */}
-                <Link
-                  href="/"
-                  className={`block px-6 py-3 text-sm font-medium transition-all duration-200 ${
-                    isActive('/')
-                      ? 'bg-white/20 text-white translate-x-4 scale-105'
-                      : 'text-white hover:bg-white/10 hover:translate-x-4 hover:scale-105'
-                  }`}
-                  onClick={() => setIsDropdownOpen(false)}
+                {/* Hamburger Icon */}
+                <svg
+                  className={`${isDropdownOpen ? 'hidden' : 'block'} transition-transform duration-200`}
+                  width="34"
+                  height="34"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
                 >
-                  home
-                </Link>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                
+                {/* Close Icon */}
+                <svg
+                  className={`${isDropdownOpen ? 'block' : 'hidden'} transition-transform duration-200`}
+                  width="34"
+                  height="34"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
 
-                {/* Menu Items */}
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`block px-6 py-3 text-sm font-medium transition-all duration-200 ${
-                      isActive(item.href)
-                        ? 'bg-white/20 text-white translate-x-4 scale-105'
-                        : 'text-white hover:bg-white/10 hover:translate-x-4 hover:scale-105'
-                    }`}
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
+              {/* Dropdown Menu */}
+              {isDropdownOpen && (
+              <div 
+                className="absolute left-0 mt-3 w-64 rounded-xl shadow-2xl animate-in slide-in-from-top-2 duration-300 tracking-tight" 
+                style={{ 
+                  fontFamily,
+                  background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.4) 100%)',
+                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                }}
+              >
+                  <div className="py-3 px-4 space-y-1">
+                    {/* Home Link */}
+                    <Link
+                      href="/"
+                      className={`block px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg ${
+                        isActive('/')
+                          ? 'bg-purple-600/30 text-white translate-x-2 scale-102'
+                          : 'text-white hover:bg-purple-700/20 hover:translate-x-2 hover:scale-102'
+                      }`}
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      Home
+                    </Link>
+
+                    {/* Menu Items */}
+                    {menuItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`block px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg ${
+                          isActive(item.href)
+                            ? 'bg-purple-600/30 text-white translate-x-2 scale-102'
+                            : 'text-white hover:bg-purple-700/20 hover:translate-x-2 hover:scale-102'
+                        }`}
+                        onClick={() => setIsDropdownOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-            )}
-          </div>
           </div>
 
           {/* Spacer to push sign-in to the right */}
@@ -129,34 +143,76 @@ export default function MenuBar() {
                 <div className="w-6 h-6 bg-white/40 rounded-full"></div>
               </div>
             ) : session ? (
-              <div className="flex items-center space-x-3">
-                <div className="hidden sm:block text-right">
-                  <div className={`text-sm font-medium drop-shadow-sm ${
-                    pathname === '/' ? 'text-white' : 'text-black'
-                  }`}>
-                    {session.user?.name}
+              <div className="relative" ref={userDropdownRef}>
+                <button
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className="flex items-center space-x-3 hover:bg-white/10 rounded-xl px-4 py-3 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/20 backdrop-blur-sm border border-white/30"
+                  type="button"
+                >
+                  <div className="hidden sm:block text-right">
+                    <div className="text-sm font-medium drop-shadow-sm text-white" style={{ color: 'white', zIndex: 10, position: 'relative' }}>
+                      {session.user?.name}
+                    </div>
+                    <div className="text-xs drop-shadow-sm text-white/80" style={{ color: 'rgba(255, 255, 255, 0.8)', zIndex: 10, position: 'relative' }}>
+                      Puzzles solved: 0
+                    </div>
                   </div>
-                  <div className={`text-xs drop-shadow-sm ${
-                    pathname === '/' ? 'text-white/80' : 'text-gray-600'
-                  }`}>
-                    Puzzles solved: 0
+                  
+                  <div className="relative">
+                    {session.user?.image ? (
+                      <img
+                        src={session.user.image}
+                        alt={session.user?.name || "User"}
+                        className="w-8 h-8 rounded-full border-2 border-white/20 hover:border-white/40 transition-colors duration-200"
+                        onError={(e) => {
+                          // Hide the image and show the fallback
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                          fallback?.style.setProperty('display', 'flex');
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className="w-8 h-8 rounded-full border-2 border-white/20 hover:border-white/40 transition-colors duration-200 bg-purple-600 flex items-center justify-center"
+                      style={{ display: session.user?.image ? 'none' : 'flex' }}
+                    >
+                      <span className="text-white text-xs font-medium">
+                        {session.user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                      </span>
+                    </div>
+                    <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                   </div>
-                </div>
-                
-                <div className="relative">
-                  <img
-                    src={session.user?.image || "/default-avatar.png"}
-                    alt={session.user?.name || "User"}
-                    className="w-8 h-8 rounded-full border-2 border-white/20 hover:border-white/40 transition-colors duration-200 cursor-pointer"
-                  />
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
-                </div>
+                </button>
+
+                {/* User Dropdown Menu */}
+                {isUserDropdownOpen && (
+                  <div 
+                    className="absolute right-0 mt-2 w-48 rounded-xl shadow-2xl transform transition-all duration-300 tracking-tight z-50" 
+                    style={{ 
+                      fontFamily,
+                      background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.4) 100%)',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+                    }}
+                  >
+                    <div className="py-3 px-4">
+                      <button
+                        onClick={() => {
+                          setIsUserDropdownOpen(false);
+                          signOut();
+                        }}
+                        className="w-full text-left px-4 py-3 text-sm font-medium text-white hover:bg-purple-700/20 transition-all duration-200 rounded-lg"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <button
                 onClick={() => signIn("google")}
                 className="bg-transparent hover:bg-white/10 px-4 py-3 rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/30 flex items-center gap-3 text-white lowercase tracking-tight"
-                style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif' }}
+                style={{ fontFamily }}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
@@ -176,7 +232,7 @@ export default function MenuBar() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span className="text-sm font-medium">sign in with google</span>
+                <span className="text-sm font-medium">Sign In With Google</span>
               </button>
             )}
           </div>

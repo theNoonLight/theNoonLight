@@ -55,7 +55,7 @@ export default function TodayPage() {
           {err ? (
             <div className="bg-red-900/30 backdrop-blur-sm rounded-xl p-8 border border-red-800/50">
               <h2 className="text-2xl font-bold text-red-300 mb-4">Error</h2>
-              <p className="text-red-200">Something went wrong loading today&apos;s puzzle. {err}</p>
+              <p className="text-red-200">Something went wrong loading Today&apos;s Puzzle. {err}</p>
             </div>
           ) : !data ? (
             <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-8 border border-gray-800/50">
@@ -65,7 +65,7 @@ export default function TodayPage() {
             <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-8 border border-gray-800/50">
               <h2 className="text-2xl font-bold text-white mb-4">Puzzle Coming Soon</h2>
               <p className="text-gray-300 leading-relaxed">
-                Come back at noon PT for today&apos;s puzzle drop!
+                Come back at noon PT for Today&apos;s Puzzle drop!
               </p>
             </div>
           ) : (
@@ -133,11 +133,6 @@ export default function TodayPage() {
                 </div>
               )}
 
-              {session && (
-                <div className="mt-6 text-sm text-gray-400">
-                  Logged in as {session.user?.name}
-                </div>
-              )}
             </div>
           )}
 
