@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function MenuBar() {
@@ -160,9 +161,11 @@ export default function MenuBar() {
                   
                   <div className="relative">
                     {session.user?.image ? (
-                      <img
+                      <Image
                         src={session.user.image}
                         alt={session.user?.name || "User"}
+                        width={32}
+                        height={32}
                         className="w-8 h-8 rounded-full border-2 border-white/20 hover:border-white/40 transition-colors duration-200"
                         onError={(e) => {
                           // Hide the image and show the fallback

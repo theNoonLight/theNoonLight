@@ -39,7 +39,7 @@ export default function TodayClient() {
   if (err) {
     return (
       <div className="text-red-600">
-        Something went wrong loading today's puzzle. {err}
+        Something went wrong loading today&apos;s puzzle. {err}
       </div>
     );
   }
