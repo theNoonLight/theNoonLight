@@ -64,7 +64,7 @@ float cnoise(vec2 P) {
   return 2.3 * mix(n_x.x, n_x.y, fade_xy.y);
 }
 
-const int OCTAVES = 4;
+const int OCTAVES = 2;
 float fbm(vec2 p) {
   float value = 0.0;
   float amp = 1.0;
@@ -94,7 +94,7 @@ void main() {
     float effect = 1.0 - smoothstep(0.0, mouseRadius, dist);
     f -= 0.5 * effect;
   }
-  vec3 col = mix(vec3(0.0), waveColor, f);
+  vec3 col = mix(vec3(0.05, 0.02, 0.1), waveColor, f);
   gl_FragColor = vec4(col, 1.0);
 }
 `;
@@ -138,8 +138,8 @@ void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
 class RetroEffectImpl extends Effect {
   constructor() {
     const uniforms = new Map([
-      ['colorNum', new THREE.Uniform(4.0)],
-      ['pixelSize', new THREE.Uniform(2.0)]
+      ['colorNum', new THREE.Uniform(3.0)],
+      ['pixelSize', new THREE.Uniform(1.5)]
     ]);
     super('RetroEffect', ditherFragmentShader, { uniforms });
     this.uniforms = uniforms;
@@ -264,22 +264,22 @@ function DitheredWaves({
 }
 
 export default function Dither({
-  waveSpeed = 0.05,
-  waveFrequency = 3,
-  waveAmplitude = 0.3,
-  waveColor = [0.5, 0.5, 0.5],
-  colorNum = 4,
-  pixelSize = 2,
+  waveSpeed = 0.03,
+  waveFrequency = 2,
+  waveAmplitude = 0.2,
+  waveColor = [0.15, 0.05, 0.25],
+  colorNum = 3,
+  pixelSize = 1.5,
   disableAnimation = false,
-  enableMouseInteraction = true,
+  enableMouseInteraction = false,
   mouseRadius = 1
 }) {
   return (
     <Canvas
       className="dither-container"
       camera={{ position: [0, 0, 6] }}
-      dpr={1}
-      gl={{ antialias: true, preserveDrawingBuffer: true }}
+      dpr={0.5}
+      gl={{ antialias: false, preserveDrawingBuffer: false }}
     >
       <DitheredWaves
         waveSpeed={waveSpeed}
