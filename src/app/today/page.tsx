@@ -42,10 +42,10 @@ export default function TodayPage() {
         {/* Hero Section */}
         <div className="text-center mb-20">
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
-            Today&apos;s Puzzle
+            Current Puzzle
           </h1>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            New challenges released daily at noon PT.
+            Stay Tuned for New Challenges!
           </p>
           <div className="w-32 h-1 bg-white mx-auto rounded-full mt-8"></div>
         </div>
@@ -73,63 +73,73 @@ export default function TodayPage() {
               <h2 className="text-3xl font-bold text-white mb-4">{data.puzzle.title}</h2>
               <p className="text-gray-300 mb-6 leading-relaxed">{data.puzzle.summary}</p>
               
-              <a
-                className="inline-block bg-white text-black px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-200"
-                href={data.puzzle.downloadUrl}
-                download
-              >
-                Download Puzzle (.zip)
-              </a>
+              {session ? (
+                <>
+                  <a
+                    className="inline-block bg-white text-black px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-200"
+                    href={data.puzzle.downloadUrl}
+                    download
+                  >
+                    Download Puzzle (.zip)
+                  </a>
 
-              <form
-                className="mt-8 space-y-4"
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  try {
-                    const response = await fetch("/api/submit", {
-                      method: "POST",
-                      body: formData,
-                    });
-                    const result = await response.json();
-                    setSubmissionResult({ 
-                      correct: result.correct, 
-                      attempts: result.attempts, 
-                      message: result.message 
-                    });
-                  } catch (error) {
-                    console.error("Submission error:", error);
-                  }
-                }}
-              >
-                <input type="hidden" name="puzzleId" value={data.puzzle.id} />
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Your Answer</label>
-                  <input
-                    type="text"
-                    name="answer"
-                    placeholder="Type your answer..."
-                    className="w-full rounded-xl border border-gray-700 bg-gray-800/50 px-4 py-3 text-white placeholder-gray-500 focus:border-white/50 focus:outline-none transition-colors"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="rounded-xl bg-white text-black px-6 py-3 font-semibold hover:bg-gray-200 transition-all duration-200"
-                >
-                  Submit Answer
-                </button>
-              </form>
+                  <form
+                    className="mt-8 space-y-4"
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      const formData = new FormData(e.currentTarget);
+                      try {
+                        const response = await fetch("/api/submit", {
+                          method: "POST",
+                          body: formData,
+                        });
+                        const result = await response.json();
+                        setSubmissionResult({ 
+                          correct: result.correct, 
+                          attempts: result.attempts, 
+                          message: result.message 
+                        });
+                      } catch (error) {
+                        console.error("Submission error:", error);
+                      }
+                    }}
+                  >
+                    <input type="hidden" name="puzzleId" value={data.puzzle.id} />
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">Your Answer</label>
+                      <input
+                        type="text"
+                        name="answer"
+                        placeholder="Type your answer..."
+                        className="w-full rounded-xl border border-gray-700 bg-gray-800/50 px-4 py-3 text-white placeholder-gray-500 focus:border-white/50 focus:outline-none transition-colors"
+                        required
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="rounded-xl bg-white text-black px-6 py-3 font-semibold hover:bg-gray-200 transition-all duration-200"
+                    >
+                      Submit Answer
+                    </button>
+                  </form>
 
-              {submissionResult && (
-                <div className={`mt-6 p-4 rounded-xl ${submissionResult.correct ? 'bg-green-900/30 border border-green-800/50' : 'bg-red-900/30 border border-red-800/50'}`}>
-                  {submissionResult.correct ? (
-                    <p className="font-medium text-green-300">
-                      {submissionResult.message || `🎉 Correct! You solved it in ${submissionResult.attempts} attempt${submissionResult.attempts !== 1 ? 's' : ''}!`}
-                    </p>
-                  ) : (
-                    <p className="text-red-300">❌ Not quite right. This was attempt #{submissionResult.attempts}. Keep trying!</p>
+                  {submissionResult && (
+                    <div className={`mt-6 p-4 rounded-xl ${submissionResult.correct ? 'bg-green-900/30 border border-green-800/50' : 'bg-red-900/30 border border-red-800/50'}`}>
+                      {submissionResult.correct ? (
+                        <p className="font-medium text-green-300">
+                          {submissionResult.message || `🎉 Correct! You solved it in ${submissionResult.attempts} attempt${submissionResult.attempts !== 1 ? 's' : ''}!`}
+                        </p>
+                      ) : (
+                        <p className="text-red-300">❌ Not quite right. This was attempt #{submissionResult.attempts}. Keep trying!</p>
+                      )}
+                    </div>
                   )}
+                </>
+              ) : (
+                <div className="mt-8 p-6 bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700/50 text-center">
+                  <p className="text-gray-300 text-lg">
+                    Sign in to view and submit the puzzle
+                  </p>
                 </div>
               )}
 
