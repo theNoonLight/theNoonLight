@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Providers from "@/components/Providers";
 import MenuBar from "@/components/MenuBar";
+import MobileWrapper from "@/components/MobileWrapper";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -35,8 +36,10 @@ export default function RootLayout({
         className={`${poppins.variable} font-poppins antialiased`}
       >
         <Providers>
-          <MenuBar />
-          {children}
+          <MobileWrapper>
+            <MenuBar />
+            {children}
+          </MobileWrapper>
         </Providers>
       </body>
     </html>
