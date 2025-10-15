@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import MobileLanding from "./MobileLanding";
 import MobileLeaderboard from "./MobileLeaderboard";
+import MobileAbout from "./MobileAbout";
 
 interface MobileWrapperProps {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ export default function MobileWrapper({ children }: MobileWrapperProps) {
     }
 
     // Define allowed mobile routes
-    const allowedMobileRoutes = ['/', '/leaderboard'];
+    const allowedMobileRoutes = ['/', '/about', '/leaderboard'];
     const isCurrentRouteAllowed = allowedMobileRoutes.includes(pathname);
 
     if (!isCurrentRouteAllowed) {
@@ -47,6 +48,10 @@ export default function MobileWrapper({ children }: MobileWrapperProps) {
   // Mobile-specific routing
   if (pathname === '/') {
     return <MobileLanding />;
+  }
+
+  if (pathname === '/about') {
+    return <MobileAbout />;
   }
 
   if (pathname === '/leaderboard') {
