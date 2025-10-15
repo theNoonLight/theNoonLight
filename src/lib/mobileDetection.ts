@@ -6,41 +6,39 @@ export function isMobileDevice(): boolean {
   
   const userAgent = window.navigator.userAgent;
   const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
   
   // Check user agent for mobile devices
   const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
   const isMobileUserAgent = mobileRegex.test(userAgent);
   
-  // Check for touch capability
-  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  // Check screen width (primary indicator for dev tools testing)
+  const isSmallScreen = screenWidth <= 768;
   
-  // Check screen dimensions (mobile typically has smaller screens)
-  const isSmallScreen = screenWidth <= 768 || (screenWidth <= 1024 && screenHeight <= 768);
-  
-  // Check for mobile-specific features
-  const isMobileOrientation = 'orientation' in window;
+  // Check for mobile viewport media query
   const hasMobileViewport = window.matchMedia('(max-width: 768px)').matches;
   
-  // Combine multiple indicators for more accurate detection
-  const mobileScore = [
-    isMobileUserAgent,
-    isTouchDevice && isSmallScreen,
-    hasMobileViewport,
-    isMobileOrientation && isSmallScreen
-  ].filter(Boolean).length;
+  // For development/testing: prioritize screen width and viewport
+  // For production: use user agent as primary indicator
+  if (process.env.NODE_ENV === 'development') {
+    return isSmallScreen || hasMobileViewport;
+  }
   
-  // Consider it mobile if 2 or more indicators are true
-  return mobileScore >= 2;
+  // Production: combine user agent with screen size
+  return isMobileUserAgent || (isSmallScreen && hasMobileViewport);
 }
 
 // React hook for mobile detection with state management
 export function useMobileDetection(): boolean {
-  const [isMobile, setIsMobile] = useState(false);
-  const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    // Initialize with a quick check if we're on the client
+    if (typeof window !== 'undefined') {
+      return isMobileDevice();
+    }
+    return false;
+  });
 
   useEffect(() => {
-    setIsClient(true);
+    // Update mobile detection on mount
     setIsMobile(isMobileDevice());
     
     // Listen for resize events to update mobile detection
@@ -55,8 +53,7 @@ export function useMobileDetection(): boolean {
     };
   }, []);
 
-  // Return false during SSR to prevent hydration mismatch
-  return isClient ? isMobile : false;
+  return isMobile;
 }
 
 // Utility to check if current route should be restricted on mobile
