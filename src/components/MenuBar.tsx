@@ -5,6 +5,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useMobileDetection } from "@/lib/mobileDetection";
 
 export default function MenuBar() {
   const { data: session, status } = useSession();
@@ -13,6 +14,7 @@ export default function MenuBar() {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userDropdownRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMobileDetection();
 
   // Close dropdown when route changes or clicking outside
   useEffect(() => {
@@ -46,6 +48,11 @@ export default function MenuBar() {
   const isActive = (href: string) => pathname === href;
 
   const fontFamily = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif';
+
+  // Hide MenuBar on mobile devices
+  if (isMobile) {
+    return null;
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
@@ -161,7 +168,7 @@ export default function MenuBar() {
                   
                   <div className="relative">
                     {session.user?.image ? (
-                      <Image
+                      <img
                         src={session.user.image}
                         alt={session.user?.name || "User"}
                         width={32}
