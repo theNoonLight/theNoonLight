@@ -58,8 +58,11 @@ export default function MenuBar() {
     <nav className="fixed top-0 left-0 right-0 z-50">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Hamburger Menu Button - Absolute Left */}
-          <div className="absolute left-4 z-10">
+          {/* Logo and Hamburger Menu Button - Absolute Left */}
+          <div className="absolute left-4 z-10 flex items-center gap-3">
+            <Link href="/" className="flex items-center">
+              <Image src="/tigermonkey_logo.svg" alt="TigerMonkey" width={40} height={40} />
+            </Link>
             <div ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -112,9 +115,10 @@ export default function MenuBar() {
                       href="/"
                       className={`block px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg ${
                         isActive('/')
-                          ? 'bg-purple-600/30 text-white translate-x-2 scale-102'
-                          : 'text-white hover:bg-purple-700/20 hover:translate-x-2 hover:scale-102'
+                          ? 'text-white translate-x-2 scale-102'
+                          : 'text-white hover:translate-x-2 hover:scale-102'
                       }`}
+                      style={isActive('/') ? { backgroundColor: 'rgba(227, 134, 26, 0.3)' } : {}}
                       onClick={() => setIsDropdownOpen(false)}
                     >
                       Home
@@ -127,9 +131,10 @@ export default function MenuBar() {
                         href={item.href}
                         className={`block px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg ${
                           isActive(item.href)
-                            ? 'bg-purple-600/30 text-white translate-x-2 scale-102'
-                            : 'text-white hover:bg-purple-700/20 hover:translate-x-2 hover:scale-102'
+                            ? 'text-white translate-x-2 scale-102'
+                            : 'text-white hover:translate-x-2 hover:scale-102'
                         }`}
+                        style={isActive(item.href) ? { backgroundColor: 'rgba(227, 134, 26, 0.3)' } : {}}
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         {item.label}
@@ -183,8 +188,8 @@ export default function MenuBar() {
                       />
                     ) : null}
                     <div 
-                      className="w-8 h-8 rounded-full border-2 border-white/20 hover:border-white/40 transition-colors duration-200 bg-purple-600 flex items-center justify-center"
-                      style={{ display: session.user?.image ? 'none' : 'flex' }}
+                      className="w-8 h-8 rounded-full border-2 border-white/20 hover:border-white/40 transition-colors duration-200 flex items-center justify-center"
+                      style={{ backgroundColor: '#E3861A', display: session.user?.image ? 'none' : 'flex' }}
                     >
                       <span className="text-white text-xs font-medium">
                         {session.user?.name?.charAt(0)?.toUpperCase() || 'U'}
@@ -210,7 +215,7 @@ export default function MenuBar() {
                           setIsUserDropdownOpen(false);
                           signOut();
                         }}
-                        className="w-full text-left px-4 py-3 text-sm font-medium text-white hover:bg-purple-700/20 transition-all duration-200 rounded-lg"
+                        className="w-full text-left px-4 py-3 text-sm font-medium text-white transition-all duration-200 rounded-lg"
                       >
                         Sign Out
                       </button>

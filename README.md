@@ -1,4 +1,4 @@
-# The Noon Light
+# TigerMonkey
 
 A daily puzzle platform built with Next.js 15 and Supabase. Users can download daily puzzles and submit their answers for validation.
 
@@ -13,7 +13,7 @@ A daily puzzle platform built with Next.js 15 and Supabase. Users can download d
 ## 🏗️ Project Structure
 
 ```
-thenoonlight-app/
+tigermonkey-app/
 ├── src/
 │   ├── app/                          # Next.js App Router
 │   │   ├── api/                      # API Routes
@@ -65,7 +65,7 @@ thenoonlight-app/
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd thenoonlight-app
+cd tigermonkey-app
 ```
 
 2. Install dependencies:

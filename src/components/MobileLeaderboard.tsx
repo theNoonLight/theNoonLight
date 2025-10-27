@@ -157,7 +157,7 @@ export default function MobileLeaderboard() {
       <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-4 border border-gray-800/50">
         <h3 className="text-lg font-bold mb-2">Mobile Access</h3>
         <p className="text-gray-300 text-sm leading-relaxed">
-          You&apos;re viewing the mobile version of The Noon Light. For the full experience including today&apos;s puzzle, please visit on desktop.
+          You&apos;re viewing the mobile version of TigerMonkey. For the full experience including today&apos;s puzzle, please visit on desktop.
         </p>
       </div>
     </div>

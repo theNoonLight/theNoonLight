@@ -1,7 +1,7 @@
-# make-env.ps1 - Creates .env.local file for the NoonLight puzzle app
+# make-env.ps1 - Creates .env.local file for the TigerMonkey puzzle app
 # Run this script to set up your environment variables
 
-Write-Host "Creating .env.local file for NoonLight puzzle app..." -ForegroundColor Green
+Write-Host "Creating .env.local file for TigerMonkey puzzle app..." -ForegroundColor Green
 
 # Check if .env.local already exists
 if (Test-Path ".env.local") {

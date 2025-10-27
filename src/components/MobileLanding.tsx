@@ -3,7 +3,8 @@
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Dither from "@/components/Dither";
+import Image from "next/image";
+import Silk from "@/components/Silk";
 
 export default function MobileLanding() {
   const { data: session, status } = useSession();
@@ -24,10 +25,11 @@ export default function MobileLanding() {
     return (
       <div className="min-h-screen relative">
         <div className="absolute inset-0 -z-10">
-          <Dither />
+          <Silk />
         </div>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-white text-center">
+            <Image src="/tigermonkey_logo.svg" alt="TigerMonkey" width={96} height={96} className="mx-auto mb-6" />
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4"></div>
             <p className="text-lg">Loading...</p>
           </div>
@@ -38,25 +40,28 @@ export default function MobileLanding() {
 
   return (
     <div className="min-h-screen relative">
-      {/* Dither Background */}
+      {/* Silk Background */}
       <div className="absolute inset-0 -z-10">
-        <Dither />
+        <Silk />
       </div>
 
       {/* Main Content */}
       <div className="min-h-screen flex items-center justify-center relative z-10 px-4">
         <div className="text-center max-w-sm w-full">
+        {/* Logo */}
+        <Image src="/tigermonkey_logo.svg" alt="TigerMonkey" width={96} height={96} className="mx-auto mb-6" />
         {/* Title */}
         <h1 
-          className="text-white mb-6 lowercase tracking-tight"
+          className="text-white mb-6 tracking-tight"
           style={{ 
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif',
+            fontFamily: '"Zalando Sans SemiExpanded", sans-serif',
             fontSize: 'clamp(3rem, 12vw, 4rem)',
-            fontWeight: 600,
-            lineHeight: 1.1
+            fontWeight: 700,
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em'
           }}
         >
-          the noon light
+          TigerMonkey
         </h1>
 
 

@@ -9,7 +9,7 @@ export default function AboutPage() {
         {/* Hero Section */}
         <div className="text-center mb-20">
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
-                About The Noon Light
+                About TigerMonkey
               </h1>
               <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
                 Where minds meet challenges and communities are built through the art of problem-solving.
@@ -23,7 +23,7 @@ export default function AboutPage() {
           <div className="bg-gray-900/30 backdrop-blur-sm rounded-xl p-8 border border-gray-800/50">
             <h2 className="text-2xl font-bold text-white mb-4">What We Do</h2>
                 <p className="text-gray-300 leading-relaxed">
-                  The Noon Light is a daily puzzle platform that challenges minds and builds community. 
+                  TigerMonkey is a daily puzzle platform that challenges minds and builds community. 
                   Every day at noon PT, we release a new puzzle designed to test your problem-solving skills.
                   Our puzzles range from logic problems and cryptography challenges to creative thinking exercises.
                 </p>

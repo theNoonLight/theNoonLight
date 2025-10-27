@@ -1,4 +1,4 @@
--- Supabase migration script for The Noon Light puzzle platform
+-- Supabase migration script for TigerMonkey puzzle platform
 -- This script sets up the complete database schema
 
 -- Enable necessary extensions

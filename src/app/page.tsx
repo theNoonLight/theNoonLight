@@ -1,24 +1,27 @@
 import Link from "next/link";
-import Dither from "@/components/Dither";
+import Image from "next/image";
+import Silk from "@/components/Silk";
 
 export default function Home() {
   return (
     <div className="min-h-screen relative">
-      {/* Dither Background */}
+      {/* Silk Background */}
       <div className="absolute inset-0 -z-10">
-        <Dither />
+        <Silk />
       </div>
         
         {/* Main content centered */}
         <div className="min-h-screen flex items-center justify-center relative z-10">
           <div className="text-center">
-            <h1 className="text-black mb-8 lowercase tracking-tight" style={{ 
+            <Image src="/tigermonkey_logo.svg" alt="TigerMonkey" width={128} height={128} className="mx-auto mb-6" />
+            <h1 className="text-black mb-8 tracking-tight" style={{ 
               textShadow: '0 0 1px white, 0 0 2px white, 0 0 3px white',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif',
+              fontFamily: '"Zalando Sans SemiExpanded", sans-serif',
               fontSize: 'clamp(4.5rem, 13vw, 8rem)',
-              fontWeight: 600
+              fontWeight: 700,
+              letterSpacing: '-0.02em'
             }}>
-              the noon light
+              TigerMonkey
             </h1>
             
             <div className="mt-8 flex justify-center">
