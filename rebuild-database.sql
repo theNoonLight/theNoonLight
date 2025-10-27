@@ -1,4 +1,4 @@
--- Complete database rebuild for The Noon Light
+-- Complete database rebuild for TigerMonkey
 -- Run this in Supabase SQL editor to recreate all tables
 
 -- 1. Create sequence for puzzles first
