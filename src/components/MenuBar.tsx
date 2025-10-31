@@ -43,9 +43,11 @@ export default function MenuBar() {
     { href: "/about", label: "About" },
     { href: "/archive", label: "Archive" },
     { href: "/leaderboard", label: "Leaderboard" },
+    { href: "/ide", label: "IDE" },
   ];
 
   const isActive = (href: string) => pathname === href;
+  const isIDEPage = pathname === "/ide";
 
   const fontFamily = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif';
 
@@ -55,26 +57,26 @@ export default function MenuBar() {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50">
+    <nav className={`fixed top-0 left-0 right-0 z-50 ${isIDEPage ? 'bg-zinc-800/95 backdrop-blur-sm border-b border-zinc-700/50' : ''}`}>
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-12">
           {/* Logo and Hamburger Menu Button - Absolute Left */}
           <div className="absolute left-4 z-10 flex items-center gap-3">
             <Link href="/" className="flex items-center">
-              <Image src="/tigermonkey_logo.svg" alt="TigerMonkey" width={40} height={40} />
+              <Image src="/tigermonkey_logo.svg" alt="TigerMonkey" width={32} height={32} />
             </Link>
             <div ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="inline-flex items-center justify-center p-3 rounded-xl transition-all duration-300 text-white hover:bg-white/10 focus:ring-white/20 focus:outline-none focus:ring-2 backdrop-blur-sm"
+                className="inline-flex items-center justify-center p-2 rounded-xl transition-all duration-300 text-white hover:bg-white/10 focus:ring-white/20 focus:outline-none focus:ring-2 backdrop-blur-sm"
                 aria-expanded={isDropdownOpen}
                 aria-label="Toggle navigation menu"
               >
                 {/* Hamburger Icon */}
                 <svg
                   className={`${isDropdownOpen ? 'hidden' : 'block'} transition-transform duration-200`}
-                  width="34"
-                  height="34"
+                  width="24"
+                  height="24"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -87,8 +89,8 @@ export default function MenuBar() {
                 {/* Close Icon */}
                 <svg
                   className={`${isDropdownOpen ? 'block' : 'hidden'} transition-transform duration-200`}
-                  width="34"
-                  height="34"
+                  width="24"
+                  height="24"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -152,14 +154,14 @@ export default function MenuBar() {
           {/* Google Sign-in Button - Top Right */}
           <div className="absolute right-4">
             {status === "loading" ? (
-              <div className="w-10 h-10 bg-white/20 rounded-full animate-pulse flex items-center justify-center">
-                <div className="w-6 h-6 bg-white/40 rounded-full"></div>
+              <div className="w-8 h-8 bg-white/20 rounded-full animate-pulse flex items-center justify-center">
+                <div className="w-5 h-5 bg-white/40 rounded-full"></div>
               </div>
             ) : session ? (
               <div className="relative" ref={userDropdownRef}>
                 <button
                   onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                  className="flex items-center space-x-3 hover:bg-white/10 rounded-xl px-4 py-3 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/20 backdrop-blur-sm border border-white/30"
+                  className="flex items-center space-x-2 hover:bg-white/10 rounded-xl px-3 py-2 transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/20 backdrop-blur-sm border border-white/30"
                   type="button"
                 >
                   <div className="hidden sm:block text-right">
@@ -226,7 +228,7 @@ export default function MenuBar() {
             ) : (
               <button
                 onClick={() => signIn("google")}
-                className="bg-transparent hover:bg-white/10 px-4 py-3 rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/30 flex items-center gap-3 text-white lowercase tracking-tight"
+                className="bg-transparent hover:bg-white/10 px-3 py-2 rounded-xl transition-all duration-200 backdrop-blur-sm border border-white/30 flex items-center gap-2 text-white lowercase tracking-tight text-sm"
                 style={{ fontFamily }}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
