@@ -28,9 +28,10 @@ export default function IDEPage() {
   const [activeFileId, setActiveFileId] = useState<string>("file-1");
   const [isEditorLoading, setIsEditorLoading] = useState(true);
   const [showTerminal, setShowTerminal] = useState(true);
-  const [terminalHeight, setTerminalHeight] = useState(200);
   const [sidebarView, setSidebarView] = useState<"explorer" | "problem">("explorer");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const editorRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const monacoRef = useRef<any>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const terminalInstanceRef = useRef<Terminal | null>(null);
@@ -115,10 +116,11 @@ export default function IDEPage() {
     if (showTerminal && fitAddonRef.current) {
       setTimeout(() => fitAddonRef.current?.fit(), 100);
     }
-  }, [showTerminal, terminalHeight]);
+  }, [showTerminal]);
 
   const activeFile = files.find((f) => f.id === activeFileId) || files[0];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEditorDidMount = (editor: any, monaco: any) => {
     editorRef.current = editor;
     monacoRef.current = monaco;
@@ -236,26 +238,6 @@ export default function IDEPage() {
     setActiveFileId(newId);
   };
 
-  const getLanguageFromFilename = (filename: string): string => {
-    const ext = filename.split(".").pop()?.toLowerCase();
-    const languageMap: Record<string, string> = {
-      js: "javascript",
-      jsx: "javascript",
-      ts: "typescript",
-      tsx: "typescript",
-      py: "python",
-      java: "java",
-      cpp: "cpp",
-      c: "c",
-      html: "html",
-      css: "css",
-      json: "json",
-      md: "markdown",
-      yml: "yaml",
-      yaml: "yaml",
-    };
-    return languageMap[ext || ""] || "javascript";
-  };
 
   return (
     <div className="h-[calc(100vh-3rem)] w-full flex flex-col bg-[#1e1e1e] mt-12">
@@ -461,7 +443,7 @@ export default function IDEPage() {
           <div
             ref={terminalRef}
             className="w-full"
-            style={{ height: `${terminalHeight}px` }}
+            style={{ height: "200px" }}
           />
         )}
       </div>
