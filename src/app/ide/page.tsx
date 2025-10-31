@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
-import { Terminal } from "@xterm/xterm";
-import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
+
+// Force dynamic rendering to prevent SSR issues with xterm and Monaco
+export const dynamic = "force-dynamic";
 
 interface File {
   id: string;
@@ -34,8 +35,10 @@ export default function IDEPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const monacoRef = useRef<any>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
-  const terminalInstanceRef = useRef<Terminal | null>(null);
-  const fitAddonRef = useRef<FitAddon | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const terminalInstanceRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fitAddonRef = useRef<any>(null);
 
   // Load files from localStorage on mount
   useEffect(() => {
@@ -61,54 +64,81 @@ export default function IDEPage() {
     }
   }, [files, isEditorLoading]);
 
-  // Initialize terminal
+  // Initialize terminal - only on client side
   useEffect(() => {
-    if (terminalRef.current && !terminalInstanceRef.current) {
-      const terminal = new Terminal({
-        theme: {
-          background: "#1e1e1e",
-          foreground: "#cccccc",
-          cursor: "#aeafad",
-        },
-        fontSize: 14,
-        fontFamily: "Consolas, 'Courier New', monospace",
-      });
+    if (typeof window === "undefined") return;
+    
+    let isMounted = true;
+    
+    const initTerminal = async () => {
+      try {
+        const [{ Terminal }, { FitAddon }] = await Promise.all([
+          import("@xterm/xterm"),
+          import("@xterm/addon-fit"),
+        ]);
 
-      const fitAddon = new FitAddon();
-      terminal.loadAddon(fitAddon);
-      terminal.open(terminalRef.current);
-      
-      // Fit terminal to container
-      setTimeout(() => fitAddon.fit(), 100);
-      
-      terminal.write("Welcome to the IDE Terminal!\r\n");
-      terminal.write("Type 'help' for available commands.\r\n");
-      terminal.write("$ ");
-
-      terminal.onData((data) => {
-        if (data === "\r") {
-          terminal.write("\r\n$ ");
-        } else if (data === "\u007f") {
-          // Backspace
-          terminal.write("\b \b");
-        } else {
-          terminal.write(data);
+        if (!isMounted || !terminalRef.current || terminalInstanceRef.current) {
+          return;
         }
-      });
 
-      terminalInstanceRef.current = terminal;
-      fitAddonRef.current = fitAddon;
+        const terminal = new Terminal({
+          theme: {
+            background: "#1e1e1e",
+            foreground: "#cccccc",
+            cursor: "#aeafad",
+          },
+          fontSize: 14,
+          fontFamily: "Consolas, 'Courier New', monospace",
+        });
 
-      const resizeObserver = new ResizeObserver(() => {
-        fitAddon.fit();
-      });
-      resizeObserver.observe(terminalRef.current);
+        const fitAddon = new FitAddon();
+        terminal.loadAddon(fitAddon);
+        terminal.open(terminalRef.current);
+        
+        // Fit terminal to container
+        setTimeout(() => fitAddon.fit(), 100);
+        
+        terminal.write("Welcome to the IDE Terminal!\r\n");
+        terminal.write("Type 'help' for available commands.\r\n");
+        terminal.write("$ ");
 
-      return () => {
-        terminal.dispose();
-        resizeObserver.disconnect();
-      };
-    }
+        terminal.onData((data) => {
+          if (data === "\r") {
+            terminal.write("\r\n$ ");
+          } else if (data === "\u007f") {
+            // Backspace
+            terminal.write("\b \b");
+          } else {
+            terminal.write(data);
+          }
+        });
+
+        terminalInstanceRef.current = terminal;
+        fitAddonRef.current = fitAddon;
+
+        const resizeObserver = new ResizeObserver(() => {
+          fitAddon.fit();
+        });
+        resizeObserver.observe(terminalRef.current);
+
+        return () => {
+          terminal.dispose();
+          resizeObserver.disconnect();
+        };
+      } catch (error) {
+        console.error("Failed to initialize terminal:", error);
+      }
+    };
+
+    initTerminal();
+
+    return () => {
+      isMounted = false;
+      if (terminalInstanceRef.current) {
+        terminalInstanceRef.current.dispose();
+        terminalInstanceRef.current = null;
+      }
+    };
   }, []);
 
   // Resize terminal when visibility changes
